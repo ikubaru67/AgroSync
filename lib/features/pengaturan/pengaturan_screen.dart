@@ -18,7 +18,7 @@ class PengaturanScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(title: const Text('Pengaturan dan Profil'), backgroundColor: AppColors.bg, surfaceTintColor: Colors.transparent),
-      body: ListView(padding: const EdgeInsets.fromLTRB(20, 0, 20, 32), children: [
+      body: ResponsiveMaxWidth(child: ListView(padding: const EdgeInsets.fromLTRB(20, 0, 20, 32), children: [
         AppCard(
           child: Row(children: [
             const IconBadge(Icons.person_rounded, bg: AppColors.primary, fg: Colors.white, size: 56),
@@ -78,7 +78,7 @@ class PengaturanScreen extends ConsumerWidget {
             },
           ),
         ),
-      ]),
+      ])),
     );
   }
 }

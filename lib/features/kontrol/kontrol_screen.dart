@@ -83,9 +83,7 @@ class _KontrolState extends ConsumerState<KontrolScreen> {
     final pumpBusy = cmd != null && cmd.tipe == 'pompa' && cmd.isActive;
     final locked = offline;
 
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(20, 0, 20, 32),
-      children: [
+    final left = <Widget>[
         Padding(padding: const EdgeInsets.only(bottom: 12), child: Text('Kontrol', style: t.headlineMedium)),
         if (offline) ...[
           OfflineBanner(updatedAt: updatedAt, now: now, compact: true),
@@ -144,27 +142,70 @@ class _KontrolState extends ConsumerState<KontrolScreen> {
           }
         })],
         const SizedBox(height: 12),
-        pumps.when(
-          loading: () => const SkeletonBox(height: 200),
-          error: (_, __) => ErrorState(onRetry: () => ref.invalidate(pumpsProvider)),
-          data: (list) => list.isEmpty
-              ? const EmptyState(icon: Icons.power_off_rounded, title: 'Belum ada data pompa', text: 'Daftar pompa akan muncul dari perangkat Anda.')
-              : Column(children: [
-                  for (final p in list) ...[
-                    _PumpCard(
-                      p: p, now: now, selected: _sel == p.id && manual && !p.on, dur: _dur,
-                      canTap: manual && !locked && !p.on && !pumpBusy, canStop: !locked,
-                      onTap: () => setState(() => _sel = _sel == p.id ? null : p.id),
-                      onDur: (d) => setState(() => _dur = d),
-                      onStart: () => _start(p.id),
-                      onStop: () => _stop(p.id),
-                      dimmed: (!manual || locked) && !p.on,
-                    ),
-                    const SizedBox(height: 12),
-                  ],
-                ]),
-        ),
-      ],
+    ];
+
+    if (MediaQuery.sizeOf(context).width >= kTablet) {
+      return ResponsiveMaxWidth(
+        maxWidth: 1200,
+        child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Expanded(child: ListView(primary: false, padding: const EdgeInsets.fromLTRB(20, 0, 20, 32), children: left)),
+          Container(width: 1, color: AppColors.line),
+          Expanded(
+            child: ListView(primary: false, padding: const EdgeInsets.fromLTRB(20, 0, 20, 32), children: [
+              Padding(padding: const EdgeInsets.only(bottom: 12), child: Text('Pompa', style: t.headlineMedium)),
+              pumps.when(
+                loading: () => const SkeletonBox(height: 200),
+                error: (_, __) => ErrorState(onRetry: () => ref.invalidate(pumpsProvider)),
+                data: (list) => list.isEmpty
+                    ? const EmptyState(icon: Icons.power_off_rounded, title: 'Belum ada data pompa', text: 'Daftar pompa akan muncul dari perangkat Anda.')
+                    : Column(children: [
+                        for (final p in list) ...[
+                          _PumpCard(
+                            p: p, now: now, selected: _sel == p.id && manual && !p.on, dur: _dur,
+                            canTap: manual && !locked && !p.on && !pumpBusy, canStop: !locked,
+                            onTap: () => setState(() => _sel = _sel == p.id ? null : p.id),
+                            onDur: (d) => setState(() => _dur = d),
+                            onStart: () => _start(p.id),
+                            onStop: () => _stop(p.id),
+                            dimmed: (!manual || locked) && !p.on,
+                          ),
+                          const SizedBox(height: 12),
+                        ],
+                      ]),
+              ),
+            ]),
+          ),
+        ]),
+      );
+    }
+
+    return ResponsiveMaxWidth(
+      child: ListView(
+        padding: const EdgeInsets.fromLTRB(20, 0, 20, 32),
+        children: [
+          ...left,
+          pumps.when(
+            loading: () => const SkeletonBox(height: 200),
+            error: (_, __) => ErrorState(onRetry: () => ref.invalidate(pumpsProvider)),
+            data: (list) => list.isEmpty
+                ? const EmptyState(icon: Icons.power_off_rounded, title: 'Belum ada data pompa', text: 'Daftar pompa akan muncul dari perangkat Anda.')
+                : Column(children: [
+                    for (final p in list) ...[
+                      _PumpCard(
+                        p: p, now: now, selected: _sel == p.id && manual && !p.on, dur: _dur,
+                        canTap: manual && !locked && !p.on && !pumpBusy, canStop: !locked,
+                        onTap: () => setState(() => _sel = _sel == p.id ? null : p.id),
+                        onDur: (d) => setState(() => _dur = d),
+                        onStart: () => _start(p.id),
+                        onStop: () => _stop(p.id),
+                        dimmed: (!manual || locked) && !p.on,
+                      ),
+                      const SizedBox(height: 12),
+                    ],
+                  ]),
+          ),
+        ],
+      ),
     );
   }
 }

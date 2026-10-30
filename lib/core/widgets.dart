@@ -4,6 +4,21 @@ import '../domain/models.dart';
 import 'format.dart';
 import 'theme.dart';
 
+/// Batas lebar untuk tata letak adaptif: lebih lebar dari ini dianggap tablet/landscape.
+const kTablet = 840.0;
+
+/// Membatasi lebar konten layar (Center + ConstrainedBox) di layar lebar
+/// tanpa mengubah tata letak ponsel.
+class ResponsiveMaxWidth extends StatelessWidget {
+  const ResponsiveMaxWidth({super.key, required this.child, this.maxWidth = 640});
+  final Widget child;
+  final double maxWidth;
+  @override
+  Widget build(BuildContext context) => Center(
+        child: ConstrainedBox(constraints: BoxConstraints(maxWidth: maxWidth), child: child),
+      );
+}
+
 enum Level { ok, warn, crit, info, neutral }
 
 class LevelStyle {

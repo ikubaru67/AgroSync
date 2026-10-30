@@ -89,10 +89,10 @@ class _RiwayatState extends ConsumerState<RiwayatScreen> {
         final ids = first.map((e) => e.id).toSet();
         final all = [...first, ..._older.where((e) => !ids.contains(e.id))];
         if (all.isEmpty) {
-          return ListView(children: [
+          return ResponsiveMaxWidth(child: ListView(children: [
             const PageTitle('Riwayat', sub: 'Semua pompa yang pernah menyala'),
             const EmptyState(icon: Icons.history_rounded, title: 'Belum ada riwayat penyiraman', text: 'Riwayat akan muncul di sini setelah pompa pertama kali menyala.'),
-          ]);
+          ]));
         }
         final now = DateTime.now();
         final children = <Widget>[const PageTitle('Riwayat', sub: 'Semua pompa yang pernah menyala')];
@@ -138,7 +138,7 @@ class _RiwayatState extends ConsumerState<RiwayatScreen> {
             ],
           ]),
         ));
-        return ListView(children: children);
+        return ResponsiveMaxWidth(child: ListView(children: children));
       },
     );
   }

@@ -6,7 +6,6 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../core/format.dart';
 import '../../core/theme.dart';
 import '../../core/widgets.dart';
-import '../../domain/models.dart';
 import '../../providers.dart';
 
 String _gejala(String? kode) => switch (kode) {
@@ -32,10 +31,12 @@ class _TanamanState extends ConsumerState<TanamanScreen> {
   void _retry() async {
     setState(() => _retrying = true);
     await Future<void>.delayed(const Duration(milliseconds: 900));
-    if (mounted) setState(() {
-      _retried.add(_tier);
-      _retrying = false;
-    });
+    if (mounted) {
+      setState(() {
+        _retried.add(_tier);
+        _retrying = false;
+      });
+    }
   }
 
   void _zoom() => showDialog<void>(
@@ -59,7 +60,7 @@ class _TanamanState extends ConsumerState<TanamanScreen> {
     final pred = ref.watch(predictionProvider).valueOrNull;
     final now = DateTime.now();
 
-    return ListView(padding: const EdgeInsets.fromLTRB(20, 0, 20, 32), children: [
+    return ResponsiveMaxWidth(child: ListView(padding: const EdgeInsets.fromLTRB(20, 0, 20, 32), children: [
       Padding(padding: const EdgeInsets.only(bottom: 12), child: Text('Tanaman', style: t.headlineMedium)),
       SizedBox(
         width: double.infinity,
@@ -195,7 +196,7 @@ class _TanamanState extends ConsumerState<TanamanScreen> {
           Text('Ini hanya perkiraan dari model. Rekomendasi tidak mengubah penyiraman otomatis.', style: t.bodySmall),
         ]),
       ),
-    ]);
+    ]));
   }
 }
 

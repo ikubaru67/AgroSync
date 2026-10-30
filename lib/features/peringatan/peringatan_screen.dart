@@ -55,7 +55,7 @@ class _PeringatanState extends ConsumerState<PeringatanScreen> {
         error: (_, __) => ErrorState(onRetry: () => ref.invalidate(alertsLiveProvider)),
         data: (all) {
           final list = all.where((a) => _filter == null || a.tingkat == _filter).toList();
-          return ListView(padding: const EdgeInsets.fromLTRB(20, 0, 20, 24), children: [
+          return ResponsiveMaxWidth(child: ListView(padding: const EdgeInsets.fromLTRB(20, 0, 20, 24), children: [
             Text('Peringatan tetap tersimpan di sini walau notifikasi di ponsel sudah terhapus.', style: t.bodySmall),
             const SizedBox(height: 12),
             Wrap(spacing: 8, children: [
@@ -81,7 +81,7 @@ class _PeringatanState extends ConsumerState<PeringatanScreen> {
               }),
               const SizedBox(height: 12),
             ],
-          ]);
+          ]));
         },
       ),
     );

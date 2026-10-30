@@ -1,4 +1,4 @@
-import 'dart:math' as math;
+﻿import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -11,9 +11,9 @@ import '../../core/widgets.dart';
 import '../../domain/models.dart';
 import '../../providers.dart';
 
-// ────────────────────────────────────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 // Beranda (Dashboard) Screen
-// ────────────────────────────────────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 class BerandaScreen extends ConsumerWidget {
   const BerandaScreen({super.key});
@@ -60,7 +60,7 @@ class _SkeletonHeader extends StatelessWidget {
   );
 }
 
-// ────────────────────────────────────────────────────────────────────────────
+// â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 class _Content extends ConsumerWidget {
   const _Content({required this.sensor});
@@ -110,21 +110,20 @@ class _Content extends ConsumerWidget {
     final hour = now.hour;
     final greeting = hour < 11 ? 'Selamat pagi' : hour < 15 ? 'Selamat siang' : hour < 18 ? 'Selamat sore' : 'Selamat malam';
 
-    return ListView(
-      padding: const EdgeInsets.fromLTRB(20, 4, 20, 24),
-      children: [
-        // ── Greeting header ──────────────────────────────────────────
+    final rekom = _RekomCard(pred: pred, now: now, onTap: () => context.go('/tanaman'));
+    final children = <Widget>[
+        // â”€â”€ Greeting header â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         _GreetingHeader(greeting: greeting, now: now, offline: offline),
         const SizedBox(height: 16),
 
-        // ── Offline / notif banners ──────────────────────────────────
+        // â”€â”€ Offline / notif banners â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         if (offline) ...[OfflineBanner(updatedAt: s.updatedAt, now: now), const SizedBox(height: 12)],
         if (perm == NotifPermission.denied) ...[
           _NotifBanner(onTap: () => ref.read(notifPermProvider.notifier).request()),
           const SizedBox(height: 12),
         ],
 
-        // ── Status keseluruhan ───────────────────────────────────────
+        // â”€â”€ Status keseluruhan â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         Semantics(
           liveRegion: true,
           child: _StatusCard(
@@ -138,9 +137,11 @@ class _Content extends ConsumerWidget {
           ),
         ),
 
-        // ── Sensor grid ──────────────────────────────────────────────
+        // â”€â”€ Sensor grid, pompa, tanaman: kolom kanan di tablet â”€â”€â”€â”€â”€â”€â”€
+    ];
+    final suffix = <Widget>[
         const SizedBox(height: 20),
-        _SectionHeader(title: 'Kondisi Sekarang', icon: Icons.monitor_heart_rounded),
+        const _SectionHeader(title: 'Kondisi Sekarang', icon: Icons.monitor_heart_rounded),
         const SizedBox(height: 12),
         IntrinsicHeight(
           child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
@@ -168,13 +169,13 @@ class _Content extends ConsumerWidget {
         const SizedBox(height: 12),
         IntrinsicHeight(
           child: Row(crossAxisAlignment: CrossAxisAlignment.stretch, children: [
-            Expanded(child: _SensorTile(icon: Icons.thermostat_rounded, label: 'Suhu', unitBg: AppColors.warnBg, unitFg: AppColors.warnInk, value: fmtNum(s.suhu), unit: '°C', sub: 'Udara di sekitar rak', sev: status.suhu, onTap: () => context.push('/sensor/suhu'))),
+            Expanded(child: _SensorTile(icon: Icons.thermostat_rounded, label: 'Suhu', unitBg: AppColors.warnBg, unitFg: AppColors.warnInk, value: fmtNum(s.suhu), unit: 'Â°C', sub: 'Udara di sekitar rak', sev: status.suhu, onTap: () => context.push('/sensor/suhu'))),
             const SizedBox(width: 12),
             Expanded(child: _SensorTile(icon: Icons.opacity_rounded, label: 'Kelembapan', unitBg: AppColors.infoBg, unitFg: AppColors.infoInk, value: s.kelembapan == null ? '-' : '${s.kelembapan!.round()}', unit: '%', sub: 'Udara di sekitar rak', sev: status.kelembapan, onTap: () => context.push('/sensor/hum'))),
           ]),
         ),
 
-        // ── Pompa ────────────────────────────────────────────────────
+        // â”€â”€ Pompa â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         const SizedBox(height: 20),
         _SectionHeader(title: 'Status Pompa', icon: Icons.water_rounded, trailing: _ModeChip(mode: ref.watch(settingsProvider).valueOrNull?.mode)),
         const SizedBox(height: 12),
@@ -200,9 +201,9 @@ class _Content extends ConsumerWidget {
           ]),
         ),
 
-        // ── Tanaman ──────────────────────────────────────────────────
+        // â”€â”€ Tanaman â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
         const SizedBox(height: 20),
-        _SectionHeader(title: 'Tanaman', icon: Icons.eco_rounded),
+        const _SectionHeader(title: 'Tanaman', icon: Icons.eco_rounded),
         const SizedBox(height: 12),
         AppCard(
           padding: EdgeInsets.zero,
@@ -211,9 +212,9 @@ class _Content extends ConsumerWidget {
             ClipRRect(
               borderRadius: const BorderRadius.vertical(top: Radius.circular(24)),
               child: Row(children: [
-                Expanded(child: _PlantTierCard(tier: 1)),
+                const Expanded(child: _PlantTierCard(tier: 1)),
                 Container(width: 2, height: 160, color: const Color(0xFFF7F9F7)),
-                Expanded(child: _PlantTierCard(tier: 2)),
+                const Expanded(child: _PlantTierCard(tier: 2)),
               ]),
             ),
             Padding(
@@ -225,24 +226,36 @@ class _Content extends ConsumerWidget {
                 ])),
                 Container(
                   padding: const EdgeInsets.all(8),
-                  decoration: BoxDecoration(color: AppColors.okBg, shape: BoxShape.circle),
+                  decoration: const BoxDecoration(color: AppColors.okBg, shape: BoxShape.circle),
                   child: const Icon(Icons.chevron_right_rounded, color: AppColors.primary),
                 ),
               ]),
             ),
           ]),
         ),
+      ];
 
-        // ── Rekomendasi ──────────────────────────────────────────────
-        const SizedBox(height: 12),
-        _RekomCard(pred: pred, now: now, onTap: () => context.go('/tanaman')),
-        const SizedBox(height: 8),
-      ],
+    // â”€â”€ Rekomendasi (bawah di ponsel, bawah kartu status di tablet) â”€â”€
+    if (MediaQuery.sizeOf(context).width >= kTablet) {
+      return ResponsiveMaxWidth(
+        maxWidth: 1200,
+        child: Row(crossAxisAlignment: CrossAxisAlignment.start, children: [
+          Expanded(child: ListView(primary: false, padding: const EdgeInsets.fromLTRB(20, 4, 20, 24), children: [...children, const SizedBox(height: 12), rekom])),
+          Container(width: 1, color: AppColors.line),
+          Expanded(child: ListView(primary: false, padding: const EdgeInsets.fromLTRB(20, 4, 20, 24), children: [...suffix, const SizedBox(height: 8)])),
+        ]),
+      );
+    }
+    return ResponsiveMaxWidth(
+      child: ListView(
+        padding: const EdgeInsets.fromLTRB(20, 4, 20, 24),
+        children: [...children, ...suffix, const SizedBox(height: 12), rekom, const SizedBox(height: 8)],
+      ),
     );
   }
 }
 
-// ── Sub-widgets ──────────────────────────────────────────────────────────────
+// â”€â”€ Sub-widgets â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€â”€
 
 class _GreetingHeader extends StatelessWidget {
   const _GreetingHeader({required this.greeting, required this.now, required this.offline});
@@ -271,15 +284,12 @@ class _GreetingHeader extends StatelessWidget {
           Text(greeting, style: t.bodyMedium!.copyWith(color: Colors.white.withAlpha(200))),
           const SizedBox(height: 2),
           Text('Kebun Hidroponik Anda', style: t.titleLarge!.copyWith(color: Colors.white, fontWeight: FontWeight.w800)),
-          const SizedBox(height: 6),
-          Row(children: [
+          const           SizedBox(height: 6),
+          Wrap(crossAxisAlignment: WrapCrossAlignment.center, spacing: 10, runSpacing: 4, children: [
             Icon(offline ? Icons.wifi_off_rounded : Icons.wifi_rounded, size: 14, color: Colors.white.withAlpha(180)),
-            const SizedBox(width: 4),
             Text(offline ? 'Perangkat offline' : 'Perangkat online',
               style: t.bodySmall!.copyWith(color: Colors.white.withAlpha(200))),
-            const SizedBox(width: 10),
             Icon(Icons.calendar_today_rounded, size: 13, color: Colors.white.withAlpha(180)),
-            const SizedBox(width: 4),
             Text(dateStr, style: t.bodySmall!.copyWith(color: Colors.white.withAlpha(200))),
           ]),
         ])),
@@ -347,7 +357,7 @@ class _StatusCard extends StatelessWidget {
             ? const StatusChip(level: Level.warn, text: 'Data tidak terbaru')
             : StatusChip.severity(overall!)),
           const SizedBox(width: 8),
-          Row(mainAxisSize: MainAxisSize.min, children: [
+          Flexible(child: Row(mainAxisSize: MainAxisSize.min, children: [
             Container(
               width: 8, height: 8,
               decoration: BoxDecoration(
@@ -357,9 +367,10 @@ class _StatusCard extends StatelessWidget {
               ),
             ),
             const SizedBox(width: 6),
-            Text(offline ? 'Offline' : 'Online',
-              style: t.titleSmall!.copyWith(color: offline ? AppColors.warnInk : AppColors.okInk, fontWeight: FontWeight.w700)),
-          ]),
+            Flexible(child: Text(offline ? 'Offline' : 'Online',
+              overflow: TextOverflow.ellipsis,
+              style: t.titleSmall!.copyWith(color: offline ? AppColors.warnInk : AppColors.okInk, fontWeight: FontWeight.w700))),
+          ])),
         ]),
         const SizedBox(height: 10),
         Text(heroTitle, style: t.headlineMedium!.copyWith(color: offline ? AppColors.ink : heroStyle.ink)),
@@ -373,7 +384,7 @@ class _StatusCard extends StatelessWidget {
           Icon(Icons.schedule_rounded, size: 14, color: offline ? AppColors.muted : heroStyle.ink.withAlpha(150)),
           const SizedBox(width: 4),
           Text(
-            sensor.updatedAt == null ? 'Waktu pembaruan tidak diketahui' : 'Diperbarui ${ago(sensor.updatedAt!, now)} · ${hhmm(sensor.updatedAt!)}',
+            sensor.updatedAt == null ? 'Waktu pembaruan tidak diketahui' : 'Diperbarui ${ago(sensor.updatedAt!, now)} Â· ${hhmm(sensor.updatedAt!)}',
             style: t.bodySmall!.copyWith(color: offline ? AppColors.muted : heroStyle.ink.withAlpha(160)),
           ),
         ]),
@@ -515,7 +526,7 @@ class _PumpRow extends StatelessWidget {
           Text(info.name, style: t.titleMedium),
           Text(
             p.on
-              ? (p.endsAt != null ? 'Sedang menyala · berhenti dalam ${countdown(left)}' : 'Sedang menyala')
+              ? (p.endsAt != null ? 'Sedang menyala Â· berhenti dalam ${countdown(left)}' : 'Sedang menyala')
               : (p.lastOn == null ? 'Belum pernah menyala' : 'Terakhir ${ago(p.lastOn!, now)}'),
             style: t.bodySmall,
           ),
@@ -597,4 +608,3 @@ class _RekomCard extends StatelessWidget {
   }
 }
 
-int _days(int ms, DateTime now) => math.max(0, ((ms - now.millisecondsSinceEpoch) / 86400000).ceil());

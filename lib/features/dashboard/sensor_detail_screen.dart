@@ -48,7 +48,7 @@ class SensorDetailScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(title: Text(m.title), backgroundColor: AppColors.bg, surfaceTintColor: Colors.transparent),
-      body: ListView(padding: const EdgeInsets.fromLTRB(20, 0, 20, 24), children: [
+      body: ResponsiveMaxWidth(child: ListView(padding: const EdgeInsets.fromLTRB(20, 0, 20, 24), children: [
         if (offline) ...[OfflineBanner(updatedAt: s?.updatedAt, now: now, compact: true), const SizedBox(height: 12)],
         AppCard(
           child: Column(children: [
@@ -92,7 +92,7 @@ class SensorDetailScreen extends ConsumerWidget {
             ],
           ]),
         ),
-      ]),
+      ])),
     );
   }
 }

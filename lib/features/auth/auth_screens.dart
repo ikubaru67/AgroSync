@@ -1,4 +1,3 @@
-import 'dart:math' as math;
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -234,7 +233,9 @@ class _LoginState extends ConsumerState<LoginScreen>
                 SizedBox(height: size.height * 0.28),
                 SlideTransition(
                   position: _formSlide,
-                  child: Container(
+                  child: ResponsiveMaxWidth(
+                    maxWidth: 480,
+                    child: Container(
                     width: double.infinity,
                     constraints: BoxConstraints(minHeight: size.height * 0.72),
                     decoration: const BoxDecoration(
@@ -331,17 +332,20 @@ class _LoginState extends ConsumerState<LoginScreen>
                           ),
                         ),
                       ),
-                    ]),
+                      ]),
+                    ),
                   ),
                 ),
-              ],
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-}
+               ],
+             ),
+           ),
+         ],
+       ),
+     );
+   }
+ }
+
+
 
 class _HeroHeader extends StatelessWidget {
   @override
