@@ -1,0 +1,30 @@
+{
+  "rules": {
+    ".read": false,
+    ".write": false,
+    "users": {
+      "$uid": {
+        ".read": "auth != null && auth.uid === $uid",
+        ".write": "auth != null && auth.uid === $uid"
+      }
+    },
+    "deviceMembers": {
+      "$deviceId": {
+        "$uid": { ".read": "auth != null && auth.uid === $uid" }
+      }
+    },
+    "devices": {
+      "$deviceId": {
+        ".read": "auth != null && root.child('deviceMembers').child($deviceId).child(auth.uid).exists()",
+        "perintah": {
+          "$cmdId": {
+            ".write": "auth != null && !data.exists() && root.child('deviceMembers').child($deviceId).child(auth.uid).exists()",
+            ".validate": "newData.child('dibuatOleh').val() === auth.uid && newData.child('status').val() === 'menunggu' && (newData.child('tipe').val() === 'pompa' || newData.child('tipe').val() === 'mode')"
+          }
+        },
+        "log": { ".indexOn": ["waktu"] },
+        "alert": { ".indexOn": ["waktu"] }
+      }
+    }
+  }
+}
