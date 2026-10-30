@@ -58,12 +58,3 @@ M1 login/sesi: `features/auth` · M2 dashboard + offline (>2 menit): `dashboard`
 M4 mode + perintah (menunggu/diterima/selesai/ditolak/kedaluwarsa 30 dtk, id unik via `push()`): `kontrol` + `CommandController` ·
 M5 log (20 per halaman, kursor waktu): `riwayat` · M6 pusat peringatan + badge belum dibaca: `peringatan` ·
 M7/M8 kartu tanaman dan rekomendasi (state "belum tersedia"): `tanaman` · E1: `data/dummy`.
-
-## Belum dikerjakan / keputusan terbuka
-- **Notifikasi push penuh:** izin + penyimpanan/penghapusan token FCM sudah ada. **Belum:** `flutter_local_notifications`
-  (notifikasi saat aplikasi di latar depan), channel Android bahaya/waspada, deep link dari ketukan notifikasi (go_router), refresh token.
-- **Foto tanaman:** sumber foto belum diputuskan (dokumen 5.4). Saat ini placeholder gambar; path berawalan `http` memakai `Image.network`
-  (butuh URL privat bertoken, belum ada `cached_network_image`).
-- Usulan tambahan ke kontrak data: `pompa/{id}/endsAt` (untuk hitung mundur), `status/kelembapan`, dan `alert/*/pesan` berbahasa Indonesia.
-- Kunci kebijakan versi paket (`pubspec.lock`), CI GitHub Actions, Crashlytics, tes widget per keadaan layar, dan tes aturan keamanan Emulator.
-- Mode gelap dan ukuran teks (fitur tambahan A1) tidak termasuk MVP.
